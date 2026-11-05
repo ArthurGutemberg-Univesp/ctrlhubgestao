@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Enviar novo documento</h3>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Enviar</button>
+    <a href="{% url 'lista_documentos' %}" class="btn btn-outline-secondary">Cancelar</a>
+</form>
+{% endblock %}

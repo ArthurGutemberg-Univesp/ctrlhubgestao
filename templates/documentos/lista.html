@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Documentos</h3>
+    <a href="{% url 'upload_documento' %}" class="btn btn-primary">+ Novo Documento</a>
+</div>
+
+<!-- Filtros -->
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <select name="categoria" class="form-select">
+            <option value="">Todas as categorias</option>
+            {% for cat in categorias %}
+                <option value="{{ cat.0 }}" {% if request.GET.categoria == cat.0 %}selected{% endif %}>{{ cat.1 }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% if user.cargo == 'ADMIN' or user.cargo == 'CONTADOR' %}
+    <div class="col-md-3">
+        <select name="cliente" class="form-select">
+            <option value="">Todos os clientes</option>
+            {% for c in clientes %}
+                <option value="{{ c.id }}" {% if request.GET.cliente == c.id|stringformat:"s" %}selected{% endif %}>{{ c.razao_social }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+    <div class="col-md-3">
+        <input type="text" name="search" class="form-control" placeholder="Buscar..." value="{{ request.GET.search }}">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-outline-secondary w-100">Filtrar</button>
+    </div>
+</form>
+
+{% if documentos %}
+<div class="list-group">
+    {% for doc in documentos %}
+        <a href="{% url 'detalhe_documento' doc.pk %}" class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <strong>{{ doc.titulo }}</strong> v{{ doc.versao_atual }}
+                    <br><small class="text-muted">{{ doc.get_categoria_display }} | {{ doc.cliente.razao_social }}</small>
+                </div>
+                <small class="text-muted">{{ doc.data_modificacao|date:"d/m/Y H:i" }}</small>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+{% else %}
+    <p class="text-muted">Nenhum documento encontrado.</p>
+{% endif %}
+{% endblock %}

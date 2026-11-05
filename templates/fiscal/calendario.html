@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Calendário Fiscal{% endblock %}
+{% block content %}
+<h3 class="mb-3">Calendário de Obrigações Fiscais</h3>
+<div id="calendar"></div>
+{% endblock %}
+
+{% block extra_js %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/locales/pt-br.global.min.js'></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: 'pt-br',
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,listMonth'
+            },
+            events: '{% url "api_eventos_calendario" %}',
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}

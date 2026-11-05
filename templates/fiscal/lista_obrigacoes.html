@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Obrigações Fiscais{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Obrigações Fiscais</h3>
+    <a href="{% url 'pagina_calendario' %}" class="btn btn-outline-info">📅 Calendário</a>
+</div>
+
+<!-- Filtro de cliente (apenas para admin/contador) -->
+{% if clientes %}
+<form method="get" class="row g-2 mb-4">
+    <div class="col-auto">
+        <select name="cliente" class="form-select">
+            <option value="">Todos os clientes</option>
+            {% for c in clientes %}
+                <option value="{{ c.id }}" {% if request.GET.cliente == c.id|stringformat:"s" %}selected{% endif %}>{{ c.razao_social }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </div>
+</form>
+{% endif %}
+
+{% if obrigacoes %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Cliente</th>
+                <th>Obrigação</th>
+                <th>Periodicidade</th>
+                <th>Vencimento Base</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ob in obrigacoes %}
+            <tr>
+                <td>{{ ob.cliente.razao_social }}</td>
+                <td><strong>{{ ob.tipo }}</strong></td>
+                <td>{{ ob.get_periodicidade_display }}</td>
+                <td>{{ ob.data_vencimento_base|date:"d/m/Y" }}</td>
+                <td>{{ ob.descricao|default:"—" }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted">Nenhuma obrigação encontrada.</p>
+{% endif %}
+{% endblock %}

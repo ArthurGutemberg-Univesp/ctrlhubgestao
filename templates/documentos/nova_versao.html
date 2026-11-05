@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Nova versão para: {{ documento.titulo }}</h3>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label">Arquivo</label>
+        <input type="file" name="arquivo" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Comentário</label>
+        <input type="text" name="comentario" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-success">Enviar</button>
+</form>
+{% endblock %}
