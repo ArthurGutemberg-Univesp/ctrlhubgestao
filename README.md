@@ -10,15 +10,15 @@ A aplicação centraliza documentos contábeis, controla obrigações fiscais e 
 | Nome | RA |
 |---|---|
 | Arthur Gutemberg Feitoza de Moraes | 24211162 |
-| Cleber Muniz Rosa | 24208469 |
-| Daniel Gomes da Silva | 23217452 |
-| Marcos Antônio da Silva | 2106124 |
+| Inayá Janaina Cardoso de Omena | 24227189 |
+| Luiz Guilherme Oliveira Pirossi | 2104559 |
+| Marcos Vinicios Sarmento Paes | 23204741 |
 | Márcia Chiquete Melo | 24210505 |
-| Miguel Silva Arruda | 24203315 |
+| Mayara Sarmento Paes | 2226804 |
+| Thiago Barcelos de Oliveira | 23205107 |
 | Victória Olga Menegasse Sampaio | 24226317 |
 
-**Tutor(a):** Sara de Carvalho Santos  
-**Polos:** Diadema; Embu das Artes; Franco da Rocha; Guarulhos; Itapevi
+**Tutor(a):** Ana Elisa Teixeira da Silva
 
 ---
 
