@@ -50,7 +50,7 @@ class Command(BaseCommand):
         admin, created = CustomUser.objects.get_or_create(
             username='admin',
             defaults={
-                'email': 'admin@yuricontador.com',
+                'email': 'admin@ctrlhub.com',
                 'cargo': 'ADMIN',
                 'is_staff': True,
                 'is_superuser': True,
@@ -66,7 +66,7 @@ class Command(BaseCommand):
             defaults={
                 'first_name': 'João',
                 'last_name': 'Contador',
-                'email': 'joao@yuricontador.com',
+                'email': 'joao@ctrlhub.com',
                 'cargo': 'CONTADOR',
                 'is_staff': True,
             }

@@ -6,7 +6,7 @@
 <!-- Linha de cards -->
 <div class="row">
     <div class="col-md-6 col-lg-4 mb-3">
-        <div class="card text-white bg-primary">
+        <div class="card text-white bg-primary shadow-sm border-0">
             <div class="card-body">
                 <h5 class="card-title display-4">{{ total_documentos }}</h5>
                 <p class="card-text">Documentos</p>
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-4 mb-3">
-        <div class="card text-white bg-success">
+        <div class="card text-white bg-success shadow-sm border-0">
             <div class="card-body">
                 <h5 class="card-title display-4">{{ total_obrigacoes }}</h5>
                 <p class="card-text">Obrigações Ativas</p>
@@ -22,10 +22,41 @@
         </div>
     </div>
     <div class="col-md-6 col-lg-4 mb-3">
-        <div class="card text-white bg-warning">
+        <div class="card text-white bg-warning shadow-sm border-0">
             <div class="card-body">
-                <h5 class="card-title display-4">{{ proximos_vencimentos|length }}</h5>
-                <p class="card-text">Próx. Vencimentos (2m)</p>
+                <h5 class="card-title display-4 text-dark">{{ proximos_vencimentos|length }}</h5>
+                <p class="card-text text-dark">Próx. Vencimentos (2m)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4 mb-4">
+    <!-- Gráfico Analítico -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0 text-muted">📊 Análise de Documentos</h5>
+            </div>
+            <div class="card-body d-flex justify-content-center">
+                <canvas id="graficoDocumentos" style="max-height: 250px;"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Painel de Ações Rápidas -->
+    <div class="col-md-6 mt-3 mt-md-0">
+        <div class="card h-100 shadow-sm border-0 bg-light">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                <h5 class="text-muted mb-4">⚡ Ações Rápidas</h5>
+                <div class="d-grid gap-3 w-75">
+                    <a href="{% url 'upload_documento' %}" class="btn btn-primary btn-lg shadow-sm">
+                        ☁️ Enviar Novo Documento
+                    </a>
+                    <a href="{% url 'pagina_calendario' %}" class="btn btn-outline-secondary btn-lg bg-white shadow-sm">
+                        📅 Abrir Calendário Fiscal
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -34,9 +65,9 @@
 <!-- Tabela de próximos vencimentos -->
 <h4 class="mt-4">📅 Próximos Vencimentos</h4>
 {% if proximos_vencimentos %}
-<div class="table-responsive">
-    <table class="table table-striped align-middle">
-        <thead>
+<div class="table-responsive bg-white rounded shadow-sm p-3 mb-4">
+    <table class="table table-striped align-middle mb-0">
+        <thead class="table-light">
             <tr>
                 <th>Cliente</th>
                 <th>Obrigação</th>
@@ -48,18 +79,69 @@
             <tr>
                 <td>{{ v.cliente }}</td>
                 <td>{{ v.tipo }}</td>
-                <td>{{ v.data|date:"d/m/Y" }}</td>
+                <td>
+                    <!-- Lógica de badges coloridos para os vencimentos -->
+                    {% if v.dias_para_vencer <= 3 %}
+                        <span class="badge bg-danger">{{ v.data|date:"d/m/Y" }} (Urgente)</span>
+                    {% elif v.dias_para_vencer <= 7 %}
+                        <span class="badge bg-warning text-dark">{{ v.data|date:"d/m/Y" }} (Atenção)</span>
+                    {% else %}
+                        <span class="badge bg-success">{{ v.data|date:"d/m/Y" }}</span>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 {% else %}
-<p class="text-muted">Nenhum vencimento nos próximos meses.</p>
+<p class="text-muted bg-white p-3 rounded shadow-sm">Nenhum vencimento nos próximos meses.</p>
 {% endif %}
 
-<div class="mt-4">
-    <a href="{% url 'lista_documentos' %}" class="btn btn-outline-primary">📂 Gerenciar Documentos</a>
-    <a href="{% url 'pagina_calendario' %}" class="btn btn-outline-info">📅 Ver Calendário</a>
+<div class="mt-4 mb-5">
+    <a href="{% url 'lista_documentos' %}" class="btn btn-outline-primary shadow-sm">📂 Gerenciar Documentos</a>
+    <a href="{% url 'pagina_calendario' %}" class="btn btn-outline-info shadow-sm">📅 Ver Calendário</a>
 </div>
+
+<!-- Importa o Chart.js no final do arquivo -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Se as variáveis gráfico não existirem, passa array vazio para não quebrar o JS
+        const labels = {{ grafico_labels|safe|default:"[]" }};
+        const dados = {{ grafico_dados|safe|default:"[]" }};
+        
+        // Só renderiza o gráfico se houver dados
+        if (labels.length > 0) {
+            const ctx = document.getElementById('graficoDocumentos').getContext('2d');
+            const graficoDoc = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dados,
+                        backgroundColor: [
+                            '#0d6efd', // Azul (Fiscais)
+                            '#198754', // Verde (Contratos)
+                            '#ffc107', // Amarelo (Folha)
+                            '#6c757d'  // Cinza (Outros)
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        } else {
+            // Mensagem de fallback caso o usuário não tenha documentos
+            document.getElementById('graficoDocumentos').parentElement.innerHTML = 
+                '<p class="text-muted my-auto">Sem dados para análise.</p>';
+        }
+    });
+</script>
 {% endblock %}

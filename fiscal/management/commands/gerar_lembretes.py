@@ -38,7 +38,7 @@ class Command(BaseCommand):
                                 message=f'Prezado(a) {contador.first_name},\n\n'
                                         f'O vencimento {obrigacao.tipo} da empresa {obrigacao.cliente.razao_social} '
                                         f'ocorrerá em {data_venc.strftime("%d/%m/%Y")}.',
-                                from_email='sistema@yuricontador.com.br',
+                                from_email='sistema@ctrlhub.com.br',
                                 recipient_list=[contador.email],
                             )
                             self.stdout.write(self.style.SUCCESS(

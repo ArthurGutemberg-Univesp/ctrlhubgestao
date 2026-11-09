@@ -1,7 +1,7 @@
-# 📁 Gestão Documental e Fiscal – Yuri Contador
+# 📁 Gestão Documental e Fiscal – CTRL HUB
 
 Sistema web desenvolvido para a disciplina **Projeto Integrador** do curso de **Engenharia da Computação** da **UNIVESP**.  
-A aplicação centraliza documentos contábeis, controla obrigações fiscais e emite alertas de vencimento, atendendo à empresa fictícia **Yuri Contador**.
+A aplicação centraliza documentos contábeis, controla obrigações fiscais e emite alertas de vencimento, atendendo à empresa fictícia **CTRL HUB**.
 
 ---
 
